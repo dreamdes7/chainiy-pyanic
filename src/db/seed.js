@@ -1,8 +1,8 @@
 require('dotenv').config();
 const db = require('./index');
 
-// Картинки берём с loremflickr (Flickr по тегу tea, lock = стабильная картинка)
-const img = (kw, lock) => `https://loremflickr.com/600/450/tea?lock=${lock}`;
+// Картинки — локальные файлы в public/images/products/<slug>.jpg
+const img = (slug) => `/images/products/${slug}.jpg`;
 
 const categories = [
   { name: 'Зелёный чай', slug: 'green' },
@@ -89,7 +89,7 @@ async function seed() {
        SET name = EXCLUDED.name, description = EXCLUDED.description,
            price = EXCLUDED.price, stock = EXCLUDED.stock,
            category_id = EXCLUDED.category_id, image_url = EXCLUDED.image_url`,
-      [p.name, p.slug, p.desc, p.price, p.stock, catIds[p.cat], img(p.kw, p.lock)]
+      [p.name, p.slug, p.desc, p.price, p.stock, catIds[p.cat], img(p.slug)]
     );
     count++;
   }
