@@ -1,0 +1,45 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+
+            APP_DIR=/opt/apps/chainiy-pyanic
+
+            # Клонируем или обновляем репозиторий
+            if [ ! -d "$APP_DIR/.git" ]; then
+              git clone https://github.com/${{ github.repository }}.git $APP_DIR
+            else
+              cd $APP_DIR
+              git fetch origin
+              git reset --hard origin/main
+            fi
+
+            cd $APP_DIR
+
+            # Устанавливаем зависимости
+            npm ci --omit=dev
+
+            # Применяем миграции БД
+            npm run migrate
+
+            # Перезапускаем сервис
+            systemctl restart chainiy-pyanic
+            systemctl is-active --quiet chainiy-pyanic && echo "Service started OK" || (journalctl -u chainiy-pyanic -n 20 && exit 1)

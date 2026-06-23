@@ -1,0 +1,15 @@
+[Unit]
+Description=Chainiy Pyanic Tea Shop
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/apps/chainiy-pyanic
+EnvironmentFile=/opt/apps/chainiy-pyanic/.env
+ExecStart=/usr/bin/node src/app.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
