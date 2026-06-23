@@ -1,69 +1,58 @@
 <%- include('../partials/header', { title: 'Корзина' }) %>
 
 <div class="container page">
-  <h1 class="section-title">Корзина</h1>
+  <div class="page-head">
+    <h1>Корзина</h1>
+  </div>
 
   <% if (items.length === 0) { %>
   <div class="cart-empty">
     <span class="icon">🛒</span>
     <h2>Корзина пуста</h2>
-    <p style="color:var(--text-muted);margin-top:.5rem">Добавьте что-нибудь из нашего каталога</p>
-    <a href="/catalog" class="btn btn-primary" style="margin-top:1.5rem">Перейти в каталог</a>
+    <p>Добавьте что-нибудь из нашего каталога</p>
+    <a href="/catalog" class="btn btn-primary">Перейти в каталог</a>
   </div>
   <% } else { %>
   <div class="cart-layout">
-    <div class="cart-table">
-      <table>
-        <thead>
-          <tr>
-            <th>Товар</th>
-            <th>Цена</th>
-            <th>Кол-во</th>
-            <th>Сумма</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% items.forEach(item => { %>
-          <tr>
-            <td>
-              <a href="/product/<%= item.slug %>" style="font-weight:600;color:var(--text)"><%= item.name %></a>
-            </td>
-            <td><%= Number(item.price).toLocaleString('ru') %> ₽</td>
-            <td><%= item.quantity %> шт.</td>
-            <td style="font-weight:700;color:var(--green-dark)"><%= (item.price * item.quantity).toLocaleString('ru') %> ₽</td>
-            <td>
-              <form action="/cart/remove" method="POST" class="inline-form">
-                <input type="hidden" name="product_id" value="<%= item.id %>">
-                <button type="submit" class="btn btn-danger btn-sm">✕</button>
-              </form>
-            </td>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
+    <div class="cart-items">
+      <% items.forEach(item => { %>
+      <div class="cart-item">
+        <div class="cart-item-img">
+          <% if (item.image_url) { %><img src="<%= item.image_url %>" alt="<%= item.name %>"><% } else { %>🍵<% } %>
+        </div>
+        <div>
+          <a href="/product/<%= item.slug %>"><div class="cart-item-name"><%= item.name %></div></a>
+          <div class="cart-item-meta"><%= Number(item.price).toLocaleString('ru') %> ₽ × <%= item.quantity %> шт.</div>
+        </div>
+        <div class="cart-item-sum"><%= (item.price * item.quantity).toLocaleString('ru') %> ₽</div>
+        <form action="/cart/remove" method="POST">
+          <input type="hidden" name="product_id" value="<%= item.id %>">
+          <button type="submit" class="btn btn-danger btn-icon" title="Удалить">✕</button>
+        </form>
+      </div>
+      <% }) %>
     </div>
 
     <div class="cart-summary">
       <h3>Итого</h3>
-      <div class="cart-total"><%= Number(total).toLocaleString('ru') %> ₽</div>
-      <div style="font-size:.85rem;color:var(--text-muted);margin-bottom:1.5rem"><%= items.length %> позиц. · <%= items.reduce((s,i) => s+i.quantity, 0) %> шт.</div>
+      <div class="summary-row"><span>Товаров</span><span><%= items.reduce((s,i) => s+i.quantity, 0) %> шт.</span></div>
+      <div class="summary-row"><span>Позиций</span><span><%= items.length %></span></div>
+      <div class="summary-row"><span>Доставка</span><span>бесплатно</span></div>
+      <div class="summary-total"><span class="lbl">К оплате</span><span class="val"><%= Number(total).toLocaleString('ru') %> ₽</span></div>
 
       <% if (user) { %>
-      <form action="/cart/checkout" method="POST">
+      <form action="/cart/checkout" method="POST" style="margin-top:1.4rem">
         <div class="form-group">
           <label>Адрес доставки</label>
-          <textarea name="address" placeholder="Город, улица, дом, квартира..." required></textarea>
+          <textarea name="address" placeholder="Город, улица, дом, квартира…" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary" style="width:100%;padding:.75rem">Оформить заказ</button>
+        <button type="submit" class="btn btn-primary btn-block">Оформить заказ</button>
       </form>
       <% } else { %>
-      <a href="/auth/login" class="btn btn-primary" style="width:100%;text-align:center;padding:.75rem;display:block">
-        Войдите для оформления
-      </a>
-      <a href="/auth/register" class="btn btn-secondary" style="width:100%;text-align:center;padding:.75rem;display:block;margin-top:.7rem">
-        Или зарегистрируйтесь
-      </a>
+      <div style="margin-top:1.4rem;display:flex;flex-direction:column;gap:.7rem">
+        <a href="/auth/login" class="btn btn-primary btn-block">Войти и оформить</a>
+        <a href="/auth/register" class="btn btn-secondary btn-block">Регистрация</a>
+      </div>
       <% } %>
     </div>
   </div>

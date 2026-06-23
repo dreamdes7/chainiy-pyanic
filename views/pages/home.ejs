@@ -1,74 +1,79 @@
 <%- include('../partials/header', { title: 'Главная' }) %>
 
 <section class="hero">
-  <div class="hero-content">
-    <h1>Откройте мир<br><span>настоящего чая</span></h1>
-    <p>Редкие сорта из Китая, Японии, Индии и Тайваня. Только натуральный листовой чай без примесей.</p>
-    <div class="hero-btns">
-      <a href="/catalog" class="btn btn-gold">Смотреть каталог</a>
-      <a href="/auth/register" class="btn btn-secondary" style="border-color:rgba(255,255,255,.5);color:#fff">Зарегистрироваться</a>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Чайная лавка с 2024 года</div>
+      <h1>Откройте мир<br><em>настоящего чая</em></h1>
+      <p>Редкие сорта из Китая, Японии, Индии и Тайваня. Только цельный листовой чай — без ароматизаторов и примесей.</p>
+      <div class="hero-btns">
+        <a href="/catalog" class="btn btn-gold">Смотреть каталог</a>
+        <a href="#featured" class="btn btn-secondary" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.3)">Новинки ↓</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">20+</div><div class="lbl">сортов чая</div></div>
+        <div class="hero-stat"><div class="num">6</div><div class="lbl">категорий</div></div>
+        <div class="hero-stat"><div class="num">100%</div><div class="lbl">натуральный</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-cup">🍵</div>
     </div>
   </div>
 </section>
 
 <div class="container page">
 
+  <div id="featured" class="section-head">
+    <div class="section-eyebrow">Свежий сбор</div>
+    <h2 class="section-title">Новинки и рекомендации</h2>
+    <p class="section-sub">Отборные сорта, которые стоит попробовать в первую очередь</p>
+  </div>
+
   <% if (featured.length > 0) { %>
-  <h2 class="section-title">Новинки и рекомендации</h2>
   <div class="products-grid">
     <% featured.forEach(p => { %>
-    <div class="product-card">
-      <% if (p.image_url) { %>
-        <img class="product-img" src="<%= p.image_url %>" alt="<%= p.name %>">
-      <% } else { %>
-        <div class="product-img-placeholder">🍵</div>
-      <% } %>
-      <div class="product-body">
-        <div class="product-name"><%= p.name %></div>
-        <div class="product-desc"><%= p.description || 'Изысканный чай высшего качества' %></div>
-        <div class="product-footer">
-          <span class="product-price"><%= Number(p.price).toLocaleString('ru') %> ₽</span>
-          <div style="display:flex;gap:.5rem">
-            <a href="/product/<%= p.slug %>" class="btn btn-secondary btn-sm">Подробнее</a>
-            <form action="/cart/add" method="POST" style="display:inline">
-              <input type="hidden" name="product_id" value="<%= p.id %>">
-              <button type="submit" class="btn btn-primary btn-sm">В корзину</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <%- include('../partials/product-card', { p }) %>
     <% }) %>
   </div>
+  <div style="text-align:center;margin-top:2.5rem">
+    <a href="/catalog" class="btn btn-primary">Весь каталог →</a>
+  </div>
   <% } else { %>
-  <div style="text-align:center;padding:4rem 2rem;color:var(--text-muted)">
-    <div style="font-size:3rem;margin-bottom:1rem">🍃</div>
-    <h3>Товары скоро появятся</h3>
-    <p style="margin-top:.5rem">Ассортимент пополняется каждую неделю</p>
+  <div class="empty-state">
+    <span class="icon">🍃</span>
+    <h2>Товары скоро появятся</h2>
+    <p>Ассортимент пополняется каждую неделю</p>
   </div>
   <% } %>
 
-  <div style="margin-top:4rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem">
-    <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:2rem;text-align:center">
-      <div style="font-size:2.5rem;margin-bottom:.8rem">🌿</div>
-      <h3 style="font-size:1.05rem;margin-bottom:.4rem">100% натуральный</h3>
-      <p style="font-size:.88rem;color:var(--text-muted)">Никаких красителей, ароматизаторов и добавок</p>
+  <div class="features-strip">
+    <div class="feature-box">
+      <span class="ic">🌿</span>
+      <h3>Натуральный</h3>
+      <p>Без красителей, ароматизаторов и добавок</p>
     </div>
-    <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:2rem;text-align:center">
-      <div style="font-size:2.5rem;margin-bottom:.8rem">🚚</div>
-      <h3 style="font-size:1.05rem;margin-bottom:.4rem">Быстрая доставка</h3>
-      <p style="font-size:.88rem;color:var(--text-muted)">Отправляем в течение 1 рабочего дня</p>
+    <div class="feature-box">
+      <span class="ic">🚚</span>
+      <h3>Быстрая доставка</h3>
+      <p>Отправляем в течение одного рабочего дня</p>
     </div>
-    <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:2rem;text-align:center">
-      <div style="font-size:2.5rem;margin-bottom:.8rem">🎁</div>
-      <h3 style="font-size:1.05rem;margin-bottom:.4rem">Подарочная упаковка</h3>
-      <p style="font-size:.88rem;color:var(--text-muted)">Красивая упаковка для подарков</p>
+    <div class="feature-box">
+      <span class="ic">🎁</span>
+      <h3>Подарочная упаковка</h3>
+      <p>Красивая упаковка для любого повода</p>
     </div>
-    <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:2rem;text-align:center">
-      <div style="font-size:2.5rem;margin-bottom:.8rem">⭐</div>
-      <h3 style="font-size:1.05rem;margin-bottom:.4rem">Редкие сорта</h3>
-      <p style="font-size:.88rem;color:var(--text-muted)">Прямые поставки от плантаций</p>
+    <div class="feature-box">
+      <span class="ic">⭐</span>
+      <h3>Редкие сорта</h3>
+      <p>Прямые поставки с лучших плантаций</p>
     </div>
+  </div>
+
+  <div class="cta-banner">
+    <h2>Не знаете, с чего начать?</h2>
+    <p>Загляните в каталог — там есть чай на любой вкус и настроение</p>
+    <a href="/catalog" class="btn btn-gold">Перейти в каталог</a>
   </div>
 
 </div>

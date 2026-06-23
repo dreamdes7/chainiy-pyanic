@@ -4,15 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= typeof title !== 'undefined' ? title + ' — ' : '' %>Чайный пьяница</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <header class="header">
   <div class="header-inner">
-    <a class="logo" href="/">🍵 <span>Чайный</span> пьяница</a>
+    <a class="logo" href="/"><span class="leaf">🍃</span> Чайный <b>пьяница</b></a>
     <nav class="nav">
       <a href="/">Главная</a>
       <a href="/catalog">Каталог</a>
+      <% if (user) { %><a href="/orders">Заказы</a><% } %>
       <% if (user && (user.role === 'admin' || user.role === 'manager')) { %>
         <a href="/admin">Панель</a>
       <% } %>
@@ -22,10 +26,10 @@
         <a href="/orders" class="header-user">👤 <%= user.name %></a>
         <a href="/cart" class="btn-cart">🛒 Корзина</a>
         <form action="/auth/logout" method="POST" style="display:inline">
-          <button type="submit" style="background:none;border:none;color:rgba(255,255,255,.6);cursor:pointer;font-size:.85rem">Выйти</button>
+          <button type="submit" class="btn-logout">Выйти</button>
         </form>
       <% } else { %>
-        <a href="/auth/login" style="color:rgba(255,255,255,.8);font-size:.9rem">Войти</a>
+        <a href="/auth/login" class="header-user">Войти</a>
         <a href="/cart" class="btn-cart">🛒 Корзина</a>
       <% } %>
     </div>

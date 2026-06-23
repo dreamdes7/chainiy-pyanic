@@ -3,72 +3,55 @@
 <div class="container page">
   <div class="breadcrumb">
     <a href="/">Главная</a>
+    <span class="sep">/</span>
     <span>Каталог</span>
   </div>
 
-  <h1 class="section-title">Каталог чая</h1>
+  <div class="page-head">
+    <h1>Каталог чая</h1>
+    <p>Выберите идеальный сорт из нашей коллекции</p>
+  </div>
 
   <div class="catalog-layout">
     <aside class="sidebar">
-      <h3>Поиск</h3>
-      <form action="/catalog" method="GET" class="search-form" style="margin-bottom:1.5rem">
-        <% if (query.category) { %><input type="hidden" name="category" value="<%= query.category %>"><% } %>
-        <input type="text" name="search" placeholder="Название чая..." value="<%= query.search || '' %>">
-        <button type="submit" class="btn btn-primary btn-sm">🔍</button>
-      </form>
+      <div class="block">
+        <h3>Поиск</h3>
+        <form action="/catalog" method="GET" class="search-form">
+          <% if (query.category) { %><input type="hidden" name="category" value="<%= query.category %>"><% } %>
+          <input type="text" name="search" placeholder="Название чая…" value="<%= query.search || '' %>">
+          <button type="submit" class="btn btn-primary btn-icon">🔍</button>
+        </form>
+      </div>
 
-      <h3>Категории</h3>
-      <ul class="filter-list">
-        <li><a href="/catalog<%= query.search ? '?search='+query.search : '' %>" class="<%= !query.category ? 'active' : '' %>">Все чаи</a></li>
-        <% categories.forEach(c => { %>
-        <li>
-          <a href="/catalog?category=<%= c.slug %><%= query.search ? '&search='+query.search : '' %>"
-             class="<%= query.category === c.slug ? 'active' : '' %>">
-            <%= c.name %>
-          </a>
-        </li>
-        <% }) %>
-      </ul>
+      <div class="block">
+        <h3>Категории</h3>
+        <ul class="filter-list">
+          <li><a href="/catalog<%= query.search ? '?search='+query.search : '' %>" class="<%= !query.category ? 'active' : '' %>">Все чаи</a></li>
+          <% categories.forEach(c => { %>
+          <li>
+            <a href="/catalog?category=<%= c.slug %><%= query.search ? '&search='+query.search : '' %>"
+               class="<%= query.category === c.slug ? 'active' : '' %>">
+              <%= c.name %>
+            </a>
+          </li>
+          <% }) %>
+        </ul>
+      </div>
     </aside>
 
     <div>
       <% if (products.length === 0) { %>
-      <div style="text-align:center;padding:4rem 2rem;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow)">
-        <div style="font-size:3rem;margin-bottom:1rem">🔍</div>
-        <h3>Ничего не найдено</h3>
-        <p style="color:var(--text-muted);margin-top:.5rem">Попробуйте изменить фильтры</p>
-        <a href="/catalog" class="btn btn-primary" style="margin-top:1.5rem">Сбросить фильтры</a>
+      <div class="empty-state">
+        <span class="icon">🔍</span>
+        <h2>Ничего не найдено</h2>
+        <p>Попробуйте изменить фильтры или поисковый запрос</p>
+        <a href="/catalog" class="btn btn-primary">Сбросить фильтры</a>
       </div>
       <% } else { %>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-        <span style="color:var(--text-muted);font-size:.9rem">Найдено: <strong><%= products.length %></strong> товаров</span>
-      </div>
+      <div class="catalog-count">Найдено: <strong><%= products.length %></strong> товаров</div>
       <div class="products-grid">
         <% products.forEach(p => { %>
-        <div class="product-card">
-          <% if (p.image_url) { %>
-            <img class="product-img" src="<%= p.image_url %>" alt="<%= p.name %>">
-          <% } else { %>
-            <div class="product-img-placeholder">🍵</div>
-          <% } %>
-          <div class="product-body">
-            <% if (p.category_name) { %>
-            <div class="product-category"><%= p.category_name %></div>
-            <% } %>
-            <div class="product-name"><%= p.name %></div>
-            <div class="product-desc"><%= p.description || '' %></div>
-            <div class="product-footer">
-              <span class="product-price"><%= Number(p.price).toLocaleString('ru') %> ₽</span>
-              <div style="display:flex;gap:.5rem">
-                <a href="/product/<%= p.slug %>" class="btn btn-secondary btn-sm">Подробнее</a>
-                <form action="/cart/add" method="POST" style="display:inline">
-                  <input type="hidden" name="product_id" value="<%= p.id %>">
-                  <button type="submit" class="btn btn-primary btn-sm">+</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+        <%- include('../partials/product-card', { p }) %>
         <% }) %>
       </div>
       <% } %>
