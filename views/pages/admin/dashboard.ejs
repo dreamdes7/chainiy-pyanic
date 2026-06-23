@@ -1,0 +1,68 @@
+<%- include('../../partials/header', { title: 'Панель управления' }) %>
+
+<div class="container page">
+  <div class="admin-layout">
+    <nav class="admin-nav">
+      <div class="admin-nav-title">Панель управления</div>
+      <a href="/admin" class="active">Обзор</a>
+      <a href="/admin/products">Товары</a>
+      <a href="/admin/orders">Заказы</a>
+      <% if (user.role === 'admin') { %>
+      <a href="/admin/users">Пользователи</a>
+      <% } %>
+      <a href="/">На сайт</a>
+    </nav>
+
+    <div class="admin-content">
+      <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:1.5rem">Обзор</h2>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-val"><%= stats.total_orders %></div>
+          <div class="stat-label">Всего заказов</div>
+        </div>
+        <div class="stat-card" style="border-color:var(--gold)">
+          <div class="stat-val" style="color:var(--gold)"><%= stats.pending %></div>
+          <div class="stat-label">Ожидают обработки</div>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h3>Последние заказы</h3>
+        <% if (recentOrders.length === 0) { %>
+        <p style="color:var(--text-muted)">Заказов пока нет</p>
+        <% } else { %>
+        <table class="data-table">
+          <thead>
+            <tr><th>#</th><th>Покупатель</th><th>Сумма</th><th>Статус</th><th>Дата</th><th></th></tr>
+          </thead>
+          <tbody>
+            <% recentOrders.forEach(o => { %>
+            <% const labels = {pending:'Ожидает',confirmed:'Подтверждён',shipped:'Отправлен',delivered:'Доставлен',cancelled:'Отменён'}; %>
+            <tr>
+              <td><strong>#<%= o.id %></strong></td>
+              <td><%= o.user_name %></td>
+              <td style="font-weight:700"><%= Number(o.total).toLocaleString('ru') %> ₽</td>
+              <td><span class="badge badge-<%= o.status %>"><%= labels[o.status] || o.status %></span></td>
+              <td style="color:var(--text-muted);font-size:.85rem"><%= new Date(o.created_at).toLocaleDateString('ru') %></td>
+              <td>
+                <form action="/admin/orders/<%= o.id %>/status" method="POST" class="inline-form" style="display:flex;gap:.5rem">
+                  <select name="status">
+                    <% ['pending','confirmed','shipped','delivered','cancelled'].forEach(s => { %>
+                    <option value="<%= s %>" <%= o.status === s ? 'selected' : '' %>><%= labels[s] %></option>
+                    <% }) %>
+                  </select>
+                  <button type="submit" class="btn btn-primary btn-sm">OK</button>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

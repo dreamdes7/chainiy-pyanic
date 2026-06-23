@@ -1,0 +1,58 @@
+<%- include('../../partials/header', { title: 'Пользователи — Панель' }) %>
+
+<div class="container page">
+  <div class="admin-layout">
+    <nav class="admin-nav">
+      <div class="admin-nav-title">Панель управления</div>
+      <a href="/admin">Обзор</a>
+      <a href="/admin/products">Товары</a>
+      <a href="/admin/orders">Заказы</a>
+      <a href="/admin/users" class="active">Пользователи</a>
+      <a href="/">На сайт</a>
+    </nav>
+
+    <div class="admin-content">
+      <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:1.5rem">Пользователи (<%= users.length %>)</h2>
+
+      <div class="admin-card" style="padding:0;overflow:hidden">
+        <table class="data-table">
+          <thead>
+            <tr><th>#</th><th>Имя</th><th>Email</th><th>Роль</th><th>Дата регистрации</th><th>Изменить роль</th></tr>
+          </thead>
+          <tbody>
+            <% users.forEach(u => { %>
+            <tr>
+              <td><%= u.id %></td>
+              <td style="font-weight:600"><%= u.name %></td>
+              <td style="font-size:.88rem;color:var(--text-muted)"><%= u.email %></td>
+              <td>
+                <span class="badge" style="
+                  background:<%= u.role==='admin' ? '#fdecea' : u.role==='manager' ? '#cfe2ff' : '#e8f0e7' %>;
+                  color:<%= u.role==='admin' ? '#c62828' : u.role==='manager' ? '#084298' : 'var(--green-dark)' %>
+                "><%= u.role %></span>
+              </td>
+              <td style="font-size:.82rem;color:var(--text-muted)"><%= new Date(u.created_at).toLocaleDateString('ru') %></td>
+              <td>
+                <% if (u.id !== user.id) { %>
+                <form action="/admin/users/<%= u.id %>/role" method="POST" class="inline-form" style="display:flex;gap:.4rem">
+                  <select name="role" style="font-size:.8rem">
+                    <option value="customer" <%= u.role==='customer' ? 'selected' : '' %>>customer</option>
+                    <option value="manager" <%= u.role==='manager' ? 'selected' : '' %>>manager</option>
+                    <option value="admin" <%= u.role==='admin' ? 'selected' : '' %>>admin</option>
+                  </select>
+                  <button type="submit" class="btn btn-primary btn-sm">OK</button>
+                </form>
+                <% } else { %>
+                <span style="font-size:.8rem;color:var(--text-muted)">это вы</span>
+                <% } %>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

@@ -1,0 +1,65 @@
+<%- include('../partials/header', { title: product.name }) %>
+
+<div class="container page">
+  <div class="breadcrumb">
+    <a href="/">Главная</a>
+    <span><a href="/catalog">Каталог</a></span>
+    <span><%= product.name %></span>
+  </div>
+
+  <div class="product-detail">
+    <div class="product-detail-img">
+      <% if (product.image_url) { %>
+        <img src="<%= product.image_url %>" alt="<%= product.name %>">
+      <% } else { %>
+        🍵
+      <% } %>
+    </div>
+
+    <div class="product-detail-info">
+      <% if (product.category_name) { %>
+      <div class="product-detail-category"><%= product.category_name %></div>
+      <% } %>
+      <h1 class="product-detail-name"><%= product.name %></h1>
+      <div class="product-detail-price"><%= Number(product.price).toLocaleString('ru') %> ₽</div>
+
+      <% if (product.stock > 0) { %>
+        <span class="stock-badge in-stock">✓ В наличии (<%= product.stock %> шт.)</span>
+      <% } else { %>
+        <span class="stock-badge out-of-stock">✕ Нет в наличии</span>
+      <% } %>
+
+      <% if (product.description) { %>
+      <p class="product-detail-desc"><%= product.description %></p>
+      <% } %>
+
+      <% if (product.stock > 0) { %>
+      <form action="/cart/add" method="POST" style="display:flex;gap:1rem;align-items:center">
+        <input type="hidden" name="product_id" value="<%= product.id %>">
+        <button type="submit" class="btn btn-primary" style="font-size:1.1rem;padding:.7rem 2rem">
+          🛒 Добавить в корзину
+        </button>
+      </form>
+      <% } %>
+
+      <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div style="background:var(--green-light);border-radius:8px;padding:1rem;text-align:center">
+            <div style="font-size:1.5rem;margin-bottom:.3rem">🌿</div>
+            <div style="font-size:.8rem;color:var(--green-dark);font-weight:600">100% натуральный</div>
+          </div>
+          <div style="background:var(--gold-light);border-radius:8px;padding:1rem;text-align:center">
+            <div style="font-size:1.5rem;margin-bottom:.3rem">🚚</div>
+            <div style="font-size:.8rem;color:#856404;font-weight:600">Быстрая доставка</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:3rem">
+    <a href="/catalog" class="btn btn-secondary">← Назад в каталог</a>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

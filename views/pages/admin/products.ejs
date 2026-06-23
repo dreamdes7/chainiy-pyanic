@@ -1,0 +1,100 @@
+<%- include('../../partials/header', { title: 'Товары — Панель' }) %>
+
+<div class="container page">
+  <div class="admin-layout">
+    <nav class="admin-nav">
+      <div class="admin-nav-title">Панель управления</div>
+      <a href="/admin">Обзор</a>
+      <a href="/admin/products" class="active">Товары</a>
+      <a href="/admin/orders">Заказы</a>
+      <% if (user.role === 'admin') { %>
+      <a href="/admin/users">Пользователи</a>
+      <% } %>
+      <a href="/">На сайт</a>
+    </nav>
+
+    <div class="admin-content">
+      <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:1.5rem">Товары</h2>
+
+      <div class="admin-card">
+        <h3>Добавить товар</h3>
+        <form action="/admin/products" method="POST">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Название</label>
+              <input type="text" name="name" placeholder="Дарджилинг FTGFOP" required>
+            </div>
+            <div class="form-group">
+              <label>Slug (URL)</label>
+              <input type="text" name="slug" placeholder="darjiling-ftgfop" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Описание</label>
+            <textarea name="description" placeholder="Описание чая..."></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Цена (₽)</label>
+              <input type="number" name="price" min="0" step="0.01" placeholder="590" required>
+            </div>
+            <div class="form-group">
+              <label>Остаток (шт.)</label>
+              <input type="number" name="stock" min="0" placeholder="100" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Категория</label>
+              <select name="category_id">
+                <option value="">— Без категории —</option>
+                <% categories.forEach(c => { %>
+                <option value="<%= c.id %>"><%= c.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>URL изображения</label>
+              <input type="url" name="image_url" placeholder="https://...">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Добавить товар</button>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <h3>Все товары (<%= products.length %>)</h3>
+        <% if (products.length === 0) { %>
+        <p style="color:var(--text-muted)">Товаров пока нет</p>
+        <% } else { %>
+        <table class="data-table">
+          <thead>
+            <tr><th>Название</th><th>Категория</th><th>Цена</th><th>Остаток</th><th></th></tr>
+          </thead>
+          <tbody>
+            <% products.forEach(p => { %>
+            <tr>
+              <td>
+                <a href="/product/<%= p.slug %>" target="_blank" style="font-weight:600"><%= p.name %></a>
+              </td>
+              <td style="color:var(--text-muted)"><%= p.category_name || '—' %></td>
+              <td style="font-weight:700"><%= Number(p.price).toLocaleString('ru') %> ₽</td>
+              <td>
+                <span style="color:<%= p.stock > 0 ? 'var(--green)' : '#c62828' %>;font-weight:600"><%= p.stock %> шт.</span>
+              </td>
+              <td>
+                <form action="/admin/products/<%= p.id %>/delete" method="POST" class="inline-form" onsubmit="return confirm('Удалить товар?')">
+                  <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer') %>

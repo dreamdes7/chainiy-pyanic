@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' — ' : '' %>Чайный пьяница</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <a class="logo" href="/">🍵 <span>Чайный</span> пьяница</a>
+    <nav class="nav">
+      <a href="/">Главная</a>
+      <a href="/catalog">Каталог</a>
+      <% if (user && (user.role === 'admin' || user.role === 'manager')) { %>
+        <a href="/admin">Панель</a>
+      <% } %>
+    </nav>
+    <div class="header-right">
+      <% if (user) { %>
+        <a href="/orders" class="header-user">👤 <%= user.name %></a>
+        <a href="/cart" class="btn-cart">🛒 Корзина</a>
+        <form action="/auth/logout" method="POST" style="display:inline">
+          <button type="submit" style="background:none;border:none;color:rgba(255,255,255,.6);cursor:pointer;font-size:.85rem">Выйти</button>
+        </form>
+      <% } else { %>
+        <a href="/auth/login" style="color:rgba(255,255,255,.8);font-size:.9rem">Войти</a>
+        <a href="/cart" class="btn-cart">🛒 Корзина</a>
+      <% } %>
+    </div>
+  </div>
+</header>

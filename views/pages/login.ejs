@@ -1,0 +1,28 @@
+<%- include('../partials/header', { title: 'Вход' }) %>
+
+<div class="container page">
+  <div class="form-wrap">
+    <div class="form-title">🍵 Добро пожаловать</div>
+    <div class="form-subtitle">Войдите в свой аккаунт</div>
+
+    <% if (error) { %>
+    <div class="form-error"><%= error %></div>
+    <% } %>
+
+    <form action="/auth/login" method="POST">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="your@email.com" required autofocus>
+      </div>
+      <div class="form-group">
+        <label>Пароль</label>
+        <input type="password" name="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;padding:.75rem">Войти</button>
+    </form>
+
+    <div class="form-link">Нет аккаунта? <a href="/auth/register">Зарегистрироваться</a></div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
