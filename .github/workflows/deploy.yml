@@ -35,7 +35,7 @@ jobs:
             cd $APP_DIR
 
             # Устанавливаем зависимости
-            npm ci --omit=dev
+            npm install --omit=dev
 
             # Применяем миграции БД
             npm run migrate
