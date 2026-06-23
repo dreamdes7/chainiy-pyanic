@@ -1,31 +1,29 @@
 <%- include('../partials/header', { title: 'Мои заказы' }) %>
 
 <div class="container page">
-  <h1 class="section-title">Мои заказы</h1>
+  <div class="page-head"><h1>Мои заказы</h1></div>
 
   <% if (orders.length === 0) { %>
-  <div style="text-align:center;padding:4rem 2rem;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow)">
-    <div style="font-size:3rem;margin-bottom:1rem">📦</div>
-    <h3>Заказов ещё нет</h3>
-    <p style="color:var(--text-muted);margin-top:.5rem">Сделайте первый заказ из нашего каталога</p>
-    <a href="/catalog" class="btn btn-primary" style="margin-top:1.5rem">Перейти в каталог</a>
+  <div class="empty">
+    <span class="ic">📦</span>
+    <h2>Заказов пока нет</h2>
+    <p>Самое время это исправить</p>
+    <a href="/catalog" class="btn btn-primary">В каталог</a>
   </div>
   <% } else { %>
-  <div class="orders-list">
+  <% const labels = {pending:'Ожидает',confirmed:'Подтверждён',shipped:'Отправлен',delivered:'Доставлен',cancelled:'Отменён'}; %>
+  <div class="orders">
     <% orders.forEach(order => { %>
     <div class="order-card">
       <div class="order-id">#<%= order.id %></div>
       <div class="order-meta">
         <strong><%= new Date(order.created_at).toLocaleDateString('ru', {day:'numeric',month:'long',year:'numeric'}) %></strong>
-        <% if (order.address) { %><span style="display:block;margin-top:.2rem;font-size:.82rem">📍 <%= order.address %></span><% } %>
+        <% if (order.address) { %><span>📍 <%= order.address %></span><% } %>
       </div>
-      <span class="badge badge-<%= order.status %>">
-        <% const labels = {pending:'Ожидает',confirmed:'Подтверждён',shipped:'Отправлен',delivered:'Доставлен',cancelled:'Отменён'}; %>
-        <%= labels[order.status] || order.status %>
-      </span>
+      <span class="badge badge-<%= order.status %>"><%= labels[order.status] || order.status %></span>
       <div style="text-align:right">
         <div class="order-total"><%= Number(order.total).toLocaleString('ru') %> ₽</div>
-        <a href="/orders/<%= order.id %>" class="btn btn-secondary btn-sm" style="margin-top:.5rem">Подробнее</a>
+        <a href="/orders/<%= order.id %>" class="btn btn-ghost btn-sm" style="margin-top:.5rem">Подробнее</a>
       </div>
     </div>
     <% }) %>

@@ -1,79 +1,82 @@
 <%- include('../partials/header', { title: 'Главная' }) %>
 
 <section class="hero">
-  <div class="hero-inner">
+  <div class="container hero-grid">
     <div class="hero-text">
-      <div class="hero-eyebrow">Чайная лавка с 2024 года</div>
-      <h1>Откройте мир<br><em>настоящего чая</em></h1>
-      <p>Редкие сорта из Китая, Японии, Индии и Тайваня. Только цельный листовой чай — без ароматизаторов и примесей.</p>
+      <span class="eyebrow hero-eyebrow">Чайная лавка · с 2024</span>
+      <h1>Пьянеем<br>от <em>настоящего</em><br>чая</h1>
+      <p class="hero-lead">Редкие сорта цельного листа из Китая, Японии, Индии и Тайваня. Никаких ароматизаторов, красителей и пыли в пакетиках — только лист, вода и ритуал.</p>
       <div class="hero-btns">
-        <a href="/catalog" class="btn btn-gold">Смотреть каталог</a>
-        <a href="#featured" class="btn btn-secondary" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.3)">Новинки ↓</a>
+        <a href="/catalog" class="btn btn-primary">Открыть каталог</a>
+        <a href="#new" class="btn btn-ghost">Что нового ↓</a>
       </div>
       <div class="hero-stats">
-        <div class="hero-stat"><div class="num">20+</div><div class="lbl">сортов чая</div></div>
-        <div class="hero-stat"><div class="num">6</div><div class="lbl">категорий</div></div>
-        <div class="hero-stat"><div class="num">100%</div><div class="lbl">натуральный</div></div>
+        <div class="hero-stat"><div class="n">20+</div><div class="l">сортов</div></div>
+        <div class="hero-stat"><div class="n">6</div><div class="l">категорий</div></div>
+        <div class="hero-stat"><div class="n">100%</div><div class="l">лист</div></div>
       </div>
     </div>
-    <div class="hero-visual">
-      <div class="hero-cup">🍵</div>
+    <div class="hero-figure reveal">
+      <div class="photo">
+        <% if (featured && featured[0] && featured[0].image_url) { %>
+          <img src="<%= featured[0].image_url %>" alt="Чай">
+        <% } else { %>
+          <img src="/images/products/matcha.jpg" alt="Чай">
+        <% } %>
+      </div>
+      <div class="hero-stamp">Свежий<br>сбор<br>2024</div>
     </div>
   </div>
 </section>
 
-<div class="container page">
+<div class="container">
 
-  <div id="featured" class="section-head">
-    <div class="section-eyebrow">Свежий сбор</div>
-    <h2 class="section-title">Новинки и рекомендации</h2>
-    <p class="section-sub">Отборные сорта, которые стоит попробовать в первую очередь</p>
+  <div id="new" class="sec-head reveal">
+    <span class="sec-num">01</span>
+    <div>
+      <span class="eyebrow">Свежий сбор</span>
+      <h2 class="sec-title">Новинки сезона</h2>
+    </div>
+    <p class="sec-note">Отборные сорта, с которых стоит начать знакомство</p>
   </div>
 
   <% if (featured.length > 0) { %>
-  <div class="products-grid">
+  <div class="grid">
     <% featured.forEach(p => { %>
-    <%- include('../partials/product-card', { p }) %>
+      <%- include('../partials/product-card', { p }) %>
     <% }) %>
   </div>
-  <div style="text-align:center;margin-top:2.5rem">
-    <a href="/catalog" class="btn btn-primary">Весь каталог →</a>
+  <div style="text-align:center;margin-top:2.6rem" class="reveal">
+    <a href="/catalog" class="btn btn-clay">Весь каталог →</a>
   </div>
   <% } else { %>
-  <div class="empty-state">
-    <span class="icon">🍃</span>
-    <h2>Товары скоро появятся</h2>
+  <div class="empty reveal">
+    <span class="ic">🍃</span>
+    <h2>Скоро здесь будет чай</h2>
     <p>Ассортимент пополняется каждую неделю</p>
   </div>
   <% } %>
 
-  <div class="features-strip">
-    <div class="feature-box">
-      <span class="ic">🌿</span>
-      <h3>Натуральный</h3>
-      <p>Без красителей, ароматизаторов и добавок</p>
+  <div class="sec-head reveal">
+    <span class="sec-num">02</span>
+    <div>
+      <span class="eyebrow">Почему мы</span>
+      <h2 class="sec-title">Чайные принципы</h2>
     </div>
-    <div class="feature-box">
-      <span class="ic">🚚</span>
-      <h3>Быстрая доставка</h3>
-      <p>Отправляем в течение одного рабочего дня</p>
-    </div>
-    <div class="feature-box">
-      <span class="ic">🎁</span>
-      <h3>Подарочная упаковка</h3>
-      <p>Красивая упаковка для любого повода</p>
-    </div>
-    <div class="feature-box">
-      <span class="ic">⭐</span>
-      <h3>Редкие сорта</h3>
-      <p>Прямые поставки с лучших плантаций</p>
-    </div>
+    <p class="sec-note">Четыре вещи, в которых мы не идём на компромисс</p>
   </div>
 
-  <div class="cta-banner">
-    <h2>Не знаете, с чего начать?</h2>
-    <p>Загляните в каталог — там есть чай на любой вкус и настроение</p>
-    <a href="/catalog" class="btn btn-gold">Перейти в каталог</a>
+  <div class="features">
+    <div class="feature reveal"><span class="ic">🌿</span><h3>Цельный лист</h3><p>Никакой пыли и крошки. Только полноценный чайный лист.</p></div>
+    <div class="feature reveal"><span class="ic">🔥</span><h3>Свежесть</h3><p>Малые партии, быстрый оборот. Чай не лежит годами на складе.</p></div>
+    <div class="feature reveal"><span class="ic">📦</span><h3>Честная упаковка</h3><p>Крафт и фольга, защищающие аромат. И подарочные коробки.</p></div>
+    <div class="feature reveal"><span class="ic">🗺️</span><h3>Прямые поставки</h3><p>Возим с конкретных садов, а не от безымянных перекупов.</p></div>
+  </div>
+
+  <div class="cta reveal">
+    <h2>Не знаете, с чего <em>начать</em>?</h2>
+    <p>В каталоге есть чай под любое настроение и время суток</p>
+    <a href="/catalog" class="btn btn-clay">Подобрать чай</a>
   </div>
 
 </div>

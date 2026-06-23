@@ -1,39 +1,31 @@
 <%- include('../partials/header', { title: 'Каталог' }) %>
 
 <div class="container page">
-  <div class="breadcrumb">
-    <a href="/">Главная</a>
-    <span class="sep">/</span>
-    <span>Каталог</span>
+  <div class="crumbs">
+    <a href="/">Главная</a><span class="sep">/</span><span>Каталог</span>
   </div>
 
   <div class="page-head">
-    <h1>Каталог чая</h1>
-    <p>Выберите идеальный сорт из нашей коллекции</p>
+    <h1>Каталог</h1>
+    <p>Выберите свой лист</p>
   </div>
 
-  <div class="catalog-layout">
-    <aside class="sidebar">
-      <div class="block">
+  <div class="shop">
+    <aside class="aside">
+      <div class="aside-block">
         <h3>Поиск</h3>
-        <form action="/catalog" method="GET" class="search-form">
+        <form action="/catalog" method="GET" class="search">
           <% if (query.category) { %><input type="hidden" name="category" value="<%= query.category %>"><% } %>
-          <input type="text" name="search" placeholder="Название чая…" value="<%= query.search || '' %>">
-          <button type="submit" class="btn btn-primary btn-icon">🔍</button>
+          <input type="text" name="search" placeholder="Название…" value="<%= query.search || '' %>">
+          <button type="submit" class="btn btn-icon">🔍</button>
         </form>
       </div>
-
-      <div class="block">
+      <div class="aside-block">
         <h3>Категории</h3>
-        <ul class="filter-list">
+        <ul class="filters">
           <li><a href="/catalog<%= query.search ? '?search='+query.search : '' %>" class="<%= !query.category ? 'active' : '' %>">Все чаи</a></li>
           <% categories.forEach(c => { %>
-          <li>
-            <a href="/catalog?category=<%= c.slug %><%= query.search ? '&search='+query.search : '' %>"
-               class="<%= query.category === c.slug ? 'active' : '' %>">
-              <%= c.name %>
-            </a>
-          </li>
+          <li><a href="/catalog?category=<%= c.slug %><%= query.search ? '&search='+query.search : '' %>" class="<%= query.category === c.slug ? 'active' : '' %>"><%= c.name %></a></li>
           <% }) %>
         </ul>
       </div>
@@ -41,17 +33,17 @@
 
     <div>
       <% if (products.length === 0) { %>
-      <div class="empty-state">
-        <span class="icon">🔍</span>
+      <div class="empty">
+        <span class="ic">🔍</span>
         <h2>Ничего не найдено</h2>
-        <p>Попробуйте изменить фильтры или поисковый запрос</p>
-        <a href="/catalog" class="btn btn-primary">Сбросить фильтры</a>
+        <p>Попробуйте изменить фильтры</p>
+        <a href="/catalog" class="btn btn-primary">Сбросить</a>
       </div>
       <% } else { %>
-      <div class="catalog-count">Найдено: <strong><%= products.length %></strong> товаров</div>
-      <div class="products-grid">
+      <div class="shop-count">Найдено <b><%= products.length %></b> позиций</div>
+      <div class="grid">
         <% products.forEach(p => { %>
-        <%- include('../partials/product-card', { p }) %>
+          <%- include('../partials/product-card', { p }) %>
         <% }) %>
       </div>
       <% } %>

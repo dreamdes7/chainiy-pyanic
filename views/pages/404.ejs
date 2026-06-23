@@ -1,10 +1,8 @@
-<%- include('../partials/header', { title: 'Страница не найдена' }) %>
-<div class="container">
-  <div class="error-page">
-    <div class="code">404</div>
-    <h2>Страница не найдена</h2>
-    <p>Возможно, страница была удалена или вы ввели неправильный адрес.</p>
-    <a href="/" class="btn btn-primary">На главную</a>
-  </div>
+<%- include('../partials/header', { title: 'Не найдено' }) %>
+<div class="container error-page">
+  <div class="code">404</div>
+  <h2>Страница заварилась где-то не там</h2>
+  <p>Возможно, её удалили или адрес введён с ошибкой</p>
+  <a href="/" class="btn btn-primary">На главную</a>
 </div>
 <%- include('../partials/footer') %>

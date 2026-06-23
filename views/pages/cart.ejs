@@ -1,30 +1,28 @@
 <%- include('../partials/header', { title: 'Корзина' }) %>
 
 <div class="container page">
-  <div class="page-head">
-    <h1>Корзина</h1>
-  </div>
+  <div class="page-head"><h1>Корзина</h1></div>
 
   <% if (items.length === 0) { %>
-  <div class="cart-empty">
-    <span class="icon">🛒</span>
+  <div class="empty">
+    <span class="ic">🛒</span>
     <h2>Корзина пуста</h2>
-    <p>Добавьте что-нибудь из нашего каталога</p>
-    <a href="/catalog" class="btn btn-primary">Перейти в каталог</a>
+    <p>Самое время выбрать чай</p>
+    <a href="/catalog" class="btn btn-primary">В каталог</a>
   </div>
   <% } else { %>
-  <div class="cart-layout">
+  <div class="cart">
     <div class="cart-items">
       <% items.forEach(item => { %>
-      <div class="cart-item">
-        <div class="cart-item-img">
-          <% if (item.image_url) { %><img src="<%= item.image_url %>" alt="<%= item.name %>"><% } else { %>🍵<% } %>
+      <div class="cart-row">
+        <div class="photo">
+          <% if (item.image_url) { %><img src="<%= item.image_url %>" alt="<%= item.name %>"><% } else { %><span class="ph">🍵</span><% } %>
         </div>
         <div>
-          <a href="/product/<%= item.slug %>"><div class="cart-item-name"><%= item.name %></div></a>
-          <div class="cart-item-meta"><%= Number(item.price).toLocaleString('ru') %> ₽ × <%= item.quantity %> шт.</div>
+          <a href="/product/<%= item.slug %>"><div class="cart-name"><%= item.name %></div></a>
+          <div class="cart-meta"><%= Number(item.price).toLocaleString('ru') %> ₽ × <%= item.quantity %> шт.</div>
         </div>
-        <div class="cart-item-sum"><%= (item.price * item.quantity).toLocaleString('ru') %> ₽</div>
+        <div class="cart-sum"><%= (item.price * item.quantity).toLocaleString('ru') %> ₽</div>
         <form action="/cart/remove" method="POST">
           <input type="hidden" name="product_id" value="<%= item.id %>">
           <button type="submit" class="btn btn-danger btn-icon" title="Удалить">✕</button>
@@ -33,16 +31,16 @@
       <% }) %>
     </div>
 
-    <div class="cart-summary">
+    <div class="summary">
       <h3>Итого</h3>
-      <div class="summary-row"><span>Товаров</span><span><%= items.reduce((s,i) => s+i.quantity, 0) %> шт.</span></div>
-      <div class="summary-row"><span>Позиций</span><span><%= items.length %></span></div>
-      <div class="summary-row"><span>Доставка</span><span>бесплатно</span></div>
-      <div class="summary-total"><span class="lbl">К оплате</span><span class="val"><%= Number(total).toLocaleString('ru') %> ₽</span></div>
+      <div class="sum-row"><span>Товаров</span><span><%= items.reduce((s,i) => s+i.quantity, 0) %> шт.</span></div>
+      <div class="sum-row"><span>Позиций</span><span><%= items.length %></span></div>
+      <div class="sum-row"><span>Доставка</span><span>бесплатно</span></div>
+      <div class="sum-total"><span class="l">К оплате</span><span class="v"><%= Number(total).toLocaleString('ru') %> ₽</span></div>
 
       <% if (user) { %>
       <form action="/cart/checkout" method="POST" style="margin-top:1.4rem">
-        <div class="form-group">
+        <div class="field">
           <label>Адрес доставки</label>
           <textarea name="address" placeholder="Город, улица, дом, квартира…" required></textarea>
         </div>
@@ -51,7 +49,7 @@
       <% } else { %>
       <div style="margin-top:1.4rem;display:flex;flex-direction:column;gap:.7rem">
         <a href="/auth/login" class="btn btn-primary btn-block">Войти и оформить</a>
-        <a href="/auth/register" class="btn btn-secondary btn-block">Регистрация</a>
+        <a href="/auth/register" class="btn btn-ghost btn-block">Регистрация</a>
       </div>
       <% } %>
     </div>

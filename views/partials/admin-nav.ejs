@@ -1,0 +1,10 @@
+<nav class="admin-nav">
+  <div class="t">Панель управления</div>
+  <a href="/admin" class="<%= active === 'dashboard' ? 'active' : '' %>">Обзор</a>
+  <a href="/admin/products" class="<%= active === 'products' ? 'active' : '' %>">Товары</a>
+  <a href="/admin/orders" class="<%= active === 'orders' ? 'active' : '' %>">Заказы</a>
+  <% if (user.role === 'admin') { %>
+  <a href="/admin/users" class="<%= active === 'users' ? 'active' : '' %>">Пользователи</a>
+  <% } %>
+  <a href="/" class="out">← На сайт</a>
+</nav>

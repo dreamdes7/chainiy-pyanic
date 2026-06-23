@@ -1,25 +1,25 @@
-<div class="product-card">
-  <a href="/product/<%= p.slug %>" class="product-media">
-    <% if (p.image_url) { %>
-      <img src="<%= p.image_url %>" alt="<%= p.name %>" loading="lazy">
-    <% } else { %>
-      <div class="placeholder">🍵</div>
-    <% } %>
+<article class="card reveal">
+  <a href="/product/<%= p.slug %>" class="card-media">
     <% if (typeof p.category_name !== 'undefined' && p.category_name) { %>
-      <span class="product-tag"><%= p.category_name %></span>
+      <span class="card-tag"><%= p.category_name %></span>
     <% } %>
+    <div class="photo">
+      <% if (p.image_url) { %>
+        <img src="<%= p.image_url %>" alt="<%= p.name %>" loading="lazy">
+      <% } else { %>
+        <span class="ph">🍵</span>
+      <% } %>
+    </div>
   </a>
-  <div class="product-body">
-    <a href="/product/<%= p.slug %>"><div class="product-name"><%= p.name %></div></a>
-    <div class="product-desc"><%= p.description || 'Изысканный чай высшего качества' %></div>
-    <div class="product-footer">
-      <span class="product-price"><%= Number(p.price).toLocaleString('ru') %> <small>₽</small></span>
-      <div class="product-actions">
-        <form action="/cart/add" method="POST">
-          <input type="hidden" name="product_id" value="<%= p.id %>">
-          <button type="submit" class="btn btn-primary btn-sm">В корзину</button>
-        </form>
-      </div>
+  <div class="card-body">
+    <a href="/product/<%= p.slug %>"><h3 class="card-name"><%= p.name %></h3></a>
+    <p class="card-desc"><%= p.description || 'Изысканный чай высшего качества' %></p>
+    <div class="card-foot">
+      <span class="price"><%= Number(p.price).toLocaleString('ru') %> <small>₽</small></span>
+      <form action="/cart/add" method="POST">
+        <input type="hidden" name="product_id" value="<%= p.id %>">
+        <button type="submit" class="btn btn-primary btn-sm">В корзину</button>
+      </form>
     </div>
   </div>
-</div>
+</article>

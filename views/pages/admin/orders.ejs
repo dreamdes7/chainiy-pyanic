@@ -1,48 +1,37 @@
 <%- include('../../partials/header', { title: 'Заказы — Панель' }) %>
 
 <div class="container page">
-  <div class="admin-layout">
-    <nav class="admin-nav">
-      <div class="admin-nav-title">Панель управления</div>
-      <a href="/admin">Обзор</a>
-      <a href="/admin/products">Товары</a>
-      <a href="/admin/orders" class="active">Заказы</a>
-      <% if (user.role === 'admin') { %>
-      <a href="/admin/users">Пользователи</a>
-      <% } %>
-      <a href="/">На сайт</a>
-    </nav>
+  <div class="admin">
+    <%- include('../../partials/admin-nav', { active: 'orders', user }) %>
 
     <div class="admin-content">
-      <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:1.5rem">Все заказы (<%= orders.length %>)</h2>
+      <h2>Заказы — <%= orders.length %></h2>
 
-      <div class="admin-card" style="padding:0;overflow:hidden">
+      <div class="panel">
         <% if (orders.length === 0) { %>
-        <p style="color:var(--text-muted);padding:1.5rem">Заказов пока нет</p>
+        <p style="color:var(--ink-soft);font-family:var(--mono);font-size:.8rem">Заказов пока нет</p>
         <% } else { %>
-        <table class="data-table">
-          <thead>
-            <tr><th>#</th><th>Покупатель</th><th>Email</th><th>Адрес</th><th>Сумма</th><th>Статус</th><th>Дата</th><th>Действие</th></tr>
-          </thead>
+        <% const labels = {pending:'Ожидает',confirmed:'Подтверждён',shipped:'Отправлен',delivered:'Доставлен',cancelled:'Отменён'}; %>
+        <table class="tbl">
+          <thead><tr><th>#</th><th>Покупатель</th><th>Email</th><th>Адрес</th><th>Сумма</th><th>Статус</th><th>Дата</th><th>Действие</th></tr></thead>
           <tbody>
-            <% const labels = {pending:'Ожидает',confirmed:'Подтверждён',shipped:'Отправлен',delivered:'Доставлен',cancelled:'Отменён'}; %>
             <% orders.forEach(o => { %>
             <tr>
               <td><strong>#<%= o.id %></strong></td>
               <td><%= o.user_name %></td>
-              <td style="font-size:.82rem;color:var(--text-muted)"><%= o.email %></td>
-              <td style="font-size:.82rem;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><%= o.address || '—' %></td>
+              <td style="font-size:.8rem;color:var(--ink-soft)"><%= o.email %></td>
+              <td style="font-size:.8rem;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><%= o.address || '—' %></td>
               <td style="font-weight:700"><%= Number(o.total).toLocaleString('ru') %> ₽</td>
               <td><span class="badge badge-<%= o.status %>"><%= labels[o.status] || o.status %></span></td>
-              <td style="font-size:.82rem;color:var(--text-muted)"><%= new Date(o.created_at).toLocaleDateString('ru') %></td>
+              <td style="font-size:.8rem;color:var(--ink-soft)"><%= new Date(o.created_at).toLocaleDateString('ru') %></td>
               <td>
-                <form action="/admin/orders/<%= o.id %>/status" method="POST" class="inline-form" style="display:flex;gap:.4rem">
-                  <select name="status" style="font-size:.8rem">
+                <form action="/admin/orders/<%= o.id %>/status" method="POST" class="inline">
+                  <select name="status">
                     <% ['pending','confirmed','shipped','delivered','cancelled'].forEach(s => { %>
                     <option value="<%= s %>" <%= o.status === s ? 'selected' : '' %>><%= labels[s] %></option>
                     <% }) %>
                   </select>
-                  <button type="submit" class="btn btn-primary btn-sm">OK</button>
+                  <button type="submit" class="btn btn-sm">OK</button>
                 </form>
               </td>
             </tr>

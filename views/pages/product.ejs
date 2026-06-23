@@ -1,55 +1,51 @@
 <%- include('../partials/header', { title: product.name }) %>
 
 <div class="container page">
-  <div class="breadcrumb">
-    <a href="/">Главная</a>
-    <span class="sep">/</span>
-    <a href="/catalog">Каталог</a>
-    <span class="sep">/</span>
+  <div class="crumbs">
+    <a href="/">Главная</a><span class="sep">/</span>
+    <a href="/catalog">Каталог</a><span class="sep">/</span>
     <span><%= product.name %></span>
   </div>
 
-  <div class="product-detail">
-    <div class="product-detail-media">
-      <% if (product.image_url) { %>
-        <img src="<%= product.image_url %>" alt="<%= product.name %>">
-      <% } else { %>
-        <div class="placeholder">🍵</div>
-      <% } %>
+  <div class="detail">
+    <div class="detail-figure">
+      <div class="photo">
+        <% if (product.image_url) { %>
+          <img src="<%= product.image_url %>" alt="<%= product.name %>">
+        <% } else { %>
+          <span class="ph">🍵</span>
+        <% } %>
+      </div>
     </div>
 
-    <div class="product-detail-info">
-      <% if (product.category_name) { %>
-      <div class="detail-category"><%= product.category_name %></div>
-      <% } %>
+    <div class="detail-info">
+      <% if (product.category_name) { %><span class="eyebrow"><%= product.category_name %></span><% } %>
       <h1><%= product.name %></h1>
       <div class="detail-price"><%= Number(product.price).toLocaleString('ru') %> <small>₽</small></div>
 
       <% if (product.stock > 0) { %>
-        <span class="stock-badge in">✓ В наличии — <%= product.stock %> шт.</span>
+        <span class="stock in">● В наличии — <%= product.stock %> шт.</span>
       <% } else { %>
-        <span class="stock-badge out">✕ Нет в наличии</span>
+        <span class="stock out">● Нет в наличии</span>
       <% } %>
 
-      <% if (product.description) { %>
-      <p class="detail-desc"><%= product.description %></p>
-      <% } %>
+      <% if (product.description) { %><p class="detail-desc"><%= product.description %></p><% } %>
 
       <% if (product.stock > 0) { %>
       <form action="/cart/add" method="POST">
         <input type="hidden" name="product_id" value="<%= product.id %>">
-        <button type="submit" class="btn btn-primary" style="padding:.8rem 2.2rem;font-size:1rem">🛒 Добавить в корзину</button>
+        <button type="submit" class="btn btn-primary" style="padding:.9rem 2.2rem">🛒 В корзину</button>
       </form>
       <% } %>
 
-      <div class="detail-features">
-        <div class="detail-feature"><span class="ic">🌿</span><span class="tx">100% натуральный</span></div>
-        <div class="detail-feature"><span class="ic">🚚</span><span class="tx">Быстрая доставка</span></div>
-        <div class="detail-feature"><span class="ic">🎁</span><span class="tx">Подарочная упаковка</span></div>
+      <div class="detail-meta">
+        <div><div class="ic">🌿</div><div class="tx">Цельный лист</div></div>
+        <div><div class="ic">🚚</div><div class="tx">Быстрая доставка</div></div>
+        <div><div class="ic">🎁</div><div class="tx">Подарочная упаковка</div></div>
       </div>
 
-      <div style="margin-top:2rem">
-        <a href="/catalog" class="btn btn-secondary">← Назад в каталог</a>
+      <div style="margin-top:1.8rem">
+        <a href="/catalog" class="btn btn-ghost btn-sm">← Назад в каталог</a>
       </div>
     </div>
   </div>
