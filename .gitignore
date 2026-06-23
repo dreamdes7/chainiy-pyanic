@@ -1,3 +1,10 @@
 node_modules/
 .env
 *.log
+
+# impeccable (локальный дизайн-скилл, не нужен на сервере)
+.claude/
+.impeccable/
+.github/skills/
+.github/hooks/
+src/assets/

@@ -19,7 +19,7 @@
     </div>
 
     <div class="detail-info">
-      <% if (product.category_name) { %><span class="eyebrow"><%= product.category_name %></span><% } %>
+      <% if (product.category_name) { %><span class="detail-label"><%= product.category_name %></span><% } %>
       <h1><%= product.name %></h1>
       <div class="detail-price"><%= Number(product.price).toLocaleString('ru') %> <small>₽</small></div>
 

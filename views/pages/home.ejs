@@ -3,9 +3,8 @@
 <section class="hero">
   <div class="container hero-grid">
     <div class="hero-text">
-      <span class="eyebrow hero-eyebrow">Чайная лавка · с 2024</span>
       <h1>Пьянеем<br>от <em>настоящего</em><br>чая</h1>
-      <p class="hero-lead">Редкие сорта цельного листа из Китая, Японии, Индии и Тайваня. Никаких ароматизаторов, красителей и пыли в пакетиках — только лист, вода и ритуал.</p>
+      <p class="hero-lead">Редкие сорта цельного листа из Китая, Японии, Индии и Тайваня. Никаких ароматизаторов и пыли в пакетиках — только лист, вода и ритуал.</p>
       <div class="hero-btns">
         <a href="/catalog" class="btn btn-primary">Открыть каталог</a>
         <a href="#new" class="btn btn-ghost">Что нового ↓</a>
@@ -13,13 +12,13 @@
       <div class="hero-stats">
         <div class="hero-stat"><div class="n">20+</div><div class="l">сортов</div></div>
         <div class="hero-stat"><div class="n">6</div><div class="l">категорий</div></div>
-        <div class="hero-stat"><div class="n">100%</div><div class="l">лист</div></div>
+        <div class="hero-stat"><div class="n">100%</div><div class="l">цельный лист</div></div>
       </div>
     </div>
     <div class="hero-figure reveal">
       <div class="photo">
         <% if (featured && featured[0] && featured[0].image_url) { %>
-          <img src="<%= featured[0].image_url %>" alt="Чай">
+          <img src="<%= featured[0].image_url %>" alt="<%= featured[0].name %>">
         <% } else { %>
           <img src="/images/products/matcha.jpg" alt="Чай">
         <% } %>
@@ -31,24 +30,44 @@
 
 <div class="container">
 
-  <div id="new" class="sec-head reveal">
-    <span class="sec-num">01</span>
-    <div>
-      <span class="eyebrow">Свежий сбор</span>
-      <h2 class="sec-title">Новинки сезона</h2>
-    </div>
-    <p class="sec-note">Отборные сорта, с которых стоит начать знакомство</p>
+  <div id="new" class="band-head reveal">
+    <h2>Новинки сезона</h2>
+    <p class="note">Отборные сорта, с которых стоит начать знакомство</p>
   </div>
 
   <% if (featured.length > 0) { %>
-  <div class="grid">
-    <% featured.forEach(p => { %>
-      <%- include('../partials/product-card', { p }) %>
-    <% }) %>
-  </div>
-  <div style="text-align:center;margin-top:2.6rem" class="reveal">
-    <a href="/catalog" class="btn btn-clay">Весь каталог →</a>
-  </div>
+    <% const lead = featured[0]; const rest = featured.slice(1); %>
+
+    <div class="feature-hero reveal">
+      <a href="/product/<%= lead.slug %>" class="photo">
+        <% if (lead.image_url) { %><img src="<%= lead.image_url %>" alt="<%= lead.name %>"><% } else { %><span class="ph">🍵</span><% } %>
+      </a>
+      <div class="feature-hero-body">
+        <span class="feature-flag">Выбор лавки</span>
+        <a href="/product/<%= lead.slug %>"><h3><%= lead.name %></h3></a>
+        <p><%= lead.description || 'Изысканный чай высшего качества' %></p>
+        <div class="feature-hero-foot">
+          <span class="price"><%= Number(lead.price).toLocaleString('ru') %> <small>₽</small></span>
+          <form action="/cart/add" method="POST">
+            <input type="hidden" name="product_id" value="<%= lead.id %>">
+            <button type="submit" class="btn btn-primary">В корзину</button>
+          </form>
+          <a href="/product/<%= lead.slug %>" class="btn btn-ghost btn-sm">Подробнее</a>
+        </div>
+      </div>
+    </div>
+
+    <% if (rest.length > 0) { %>
+    <div class="grid">
+      <% rest.forEach(p => { %>
+        <%- include('../partials/product-card', { p }) %>
+      <% }) %>
+    </div>
+    <% } %>
+
+    <div style="text-align:center;margin-top:2.4rem" class="reveal">
+      <a href="/catalog" class="btn btn-clay">Весь каталог →</a>
+    </div>
   <% } else { %>
   <div class="empty reveal">
     <span class="ic">🍃</span>
@@ -57,19 +76,15 @@
   </div>
   <% } %>
 
-  <div class="sec-head reveal">
-    <span class="sec-num">02</span>
-    <div>
-      <span class="eyebrow">Почему мы</span>
-      <h2 class="sec-title">Чайные принципы</h2>
-    </div>
-    <p class="sec-note">Четыре вещи, в которых мы не идём на компромисс</p>
+  <div class="band-head reveal">
+    <h2>Чайные принципы</h2>
+    <p class="note">Четыре вещи, в которых мы не идём на компромисс</p>
   </div>
 
   <div class="features">
     <div class="feature reveal"><span class="ic">🌿</span><h3>Цельный лист</h3><p>Никакой пыли и крошки. Только полноценный чайный лист.</p></div>
     <div class="feature reveal"><span class="ic">🔥</span><h3>Свежесть</h3><p>Малые партии, быстрый оборот. Чай не лежит годами на складе.</p></div>
-    <div class="feature reveal"><span class="ic">📦</span><h3>Честная упаковка</h3><p>Крафт и фольга, защищающие аромат. И подарочные коробки.</p></div>
+    <div class="feature reveal"><span class="ic">📦</span><h3>Честная упаковка</h3><p>Крафт и фольга, что берегут аромат. И подарочные коробки.</p></div>
     <div class="feature reveal"><span class="ic">🗺️</span><h3>Прямые поставки</h3><p>Возим с конкретных садов, а не от безымянных перекупов.</p></div>
   </div>
 
