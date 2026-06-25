@@ -50,19 +50,32 @@ async function migrate() {
     );
   `);
 
+  // Добавляем поле username если не существует
+  await db.query(`
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS username VARCHAR(50) UNIQUE;
+  `);
+
   // Создаём admin если не существует
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (adminEmail && adminPassword) {
-    const existing = await db.query('SELECT id FROM users WHERE email = $1', [adminEmail]);
-    if (existing.rows.length === 0) {
-      const hash = await bcrypt.hash(adminPassword, 12);
-      await db.query(
-        'INSERT INTO users (email, password_hash, name, role) VALUES ($1, $2, $3, $4)',
-        [adminEmail, hash, 'Admin', 'admin']
-      );
-      console.log(`Admin created: ${adminEmail}`);
-    }
+  const adminUsername = process.env.ADMIN_USERNAME || 'ivan';
+  const adminEmail = process.env.ADMIN_EMAIL || 'ivan@admin.local';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'kosonogov';
+
+  const existing = await db.query('SELECT id FROM users WHERE username = $1 OR email = $2', [adminUsername, adminEmail]);
+  if (existing.rows.length === 0) {
+    const hash = await bcrypt.hash(adminPassword, 12);
+    await db.query(
+      'INSERT INTO users (email, password_hash, name, username, role) VALUES ($1, $2, $3, $4, $5)',
+      [adminEmail, hash, 'Ivan', adminUsername, 'admin']
+    );
+    console.log(`Admin created: ${adminUsername}`);
+  } else {
+    // Обновляем пароль и роль если пользователь уже есть
+    const hash = await bcrypt.hash(adminPassword, 12);
+    await db.query(
+      'UPDATE users SET password_hash = $1, role = $2, username = $3 WHERE email = $4 OR username = $3',
+      [hash, 'admin', adminUsername, adminEmail]
+    );
+    console.log(`Admin updated: ${adminUsername}`);
   }
 
   console.log('Migration complete');
